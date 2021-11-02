@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { GetStaticProps } from 'next';
 import Head from 'next/head';
-// import Link from 'next/link';
+import Link from 'next/link';
 
 import Prismic from '@prismicio/client';
 
@@ -16,6 +16,7 @@ import styles from './home.module.scss';
 
 interface Post {
   uid?: string;
+  slug: string;
   first_publication_date: string | null;
   data: {
     title: string;
@@ -37,53 +38,58 @@ export default function Home({ postsPagination }: HomeProps) {
   const [posts, setPosts] = useState(postsPagination.results);
   const [nextPage, setNextPage] = useState(postsPagination.next_page);
 
-  async function handleMorePosts() {
-    await fetch(nextPage)
-      .then(response => response.json())
-      .then(data => {
-        const newPost = data.results.map(post => {
-          return {
-            slug: post.uid,
-            first_publication_date: format(
-              new Date(post.first_publication_date),
-              'dd MMM yyyy',
-              { locale: ptBR }
-            ),
-            data: {
-              title: post.data.title,
-              subtitle: post.data.subtitle,
-              author: post.data.author,
-            },
-          };
-        });
+  async function handleMorePosts(): Promise<void> {
+    if (nextPage !== null) {
+      await fetch(nextPage)
+        .then(response => response.json())
+        .then(data => {
+          const newPost = data.results.map(post => {
+            return {
+              slug: post.uid,
+              first_publication_date: format(
+                new Date(post.first_publication_date),
+                'dd MMM yyyy',
+                { locale: ptBR }
+              ),
+              data: {
+                title: post.data.title,
+                subtitle: post.data.subtitle,
+                author: post.data.author,
+              },
+            };
+          });
 
-        const nextPagePosts = [...posts, newPost[0]];
-        setPosts(nextPagePosts);
-        setNextPage(data.next_page);
-      });
+          const nextPagePosts = [...posts, newPost[0]];
+
+          setPosts(nextPagePosts);
+          setNextPage(data.next_page);
+        });
+    }
   }
 
   return (
     <>
       <Head>
-        <title>Inicio</title>
+        <title>Início</title>
       </Head>
 
       <main className={styles.container}>
         <div className={styles.posts}>
           {posts.map(post => (
-            <a href="/" key={post.slug}>
-              <strong>{post.data.title}</strong>
-              <p>{post.data.subtitle}</p>
-              <div className={styles.infoPost}>
-                <span>
-                  <FiCalendar size={20} /> {post.first_publication_date}
-                </span>
-                <span>
-                  <FiUser size={20} /> {post.data.author}
-                </span>
-              </div>
-            </a>
+            <Link href={`/post/${post.slug}`} key={post.slug}>
+              <a>
+                <strong>{post.data.title}</strong>
+                <p>{post.data.subtitle}</p>
+                <div className={styles.infoPost}>
+                  <span>
+                    <FiCalendar size={20} /> {post.first_publication_date}
+                  </span>
+                  <span>
+                    <FiUser size={20} /> {post.data.author}
+                  </span>
+                </div>
+              </a>
+            </Link>
           ))}
         </div>
 

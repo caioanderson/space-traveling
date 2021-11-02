@@ -34,6 +34,8 @@
       font-size: 1.75rem;
       margin-bottom: .5rem;
       line-height: 2rem;
+      font-weight: bold;
+
 
     }
 
@@ -41,7 +43,7 @@
       color: var(--gray-500);
       margin-top: .5rem;
       line-height: 1.625rem;
-
+      font-weight: 400;
       margin-bottom: 1.5rem;
   }
 
@@ -57,6 +59,7 @@
 
   span{
     font-size: .875rem;
+    font-weight: 400;
     color: var(--gray-800);
 
     text-transform: capitalize;

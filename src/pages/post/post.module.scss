@@ -1,1 +1,79 @@
 // TODO
+.banner{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 100%;
+
+  img{
+    width: 100%;
+    height: 400px;
+  }
+}
+
+.header{
+  margin-top: 5rem;
+
+  h1{
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .infoPost{
+
+    display: flex;
+    align-items: center;
+
+    span{
+      font-size: .875rem;
+      font-weight: 400;
+      color: var(--gray-800);
+
+      text-transform: capitalize;
+
+      display: flex;
+      align-items: center;
+
+      svg{
+        margin-right: .5rem;
+      }
+
+    }
+
+    span + span{
+      margin-left: 1.5rem;
+    }
+  }
+
+}
+
+.content{
+  margin-top: 4rem;
+
+  h2{
+    font-size: 2.25rem;
+  }
+
+  .body{
+    margin-top: 2rem;
+
+    p, span, li{
+      color: var(--gray-800);
+      line-height: 2rem;
+      text-align: justify;
+
+      strong{
+        color: var(--pink-800);
+
+        &:first-child{
+          color: var(--gray-800);
+        }
+
+        &:last-child{
+          color: var(--gray-800);
+        }
+      }
+    }
+  }
+}
