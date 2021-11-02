@@ -34,13 +34,6 @@ interface PostProps {
 }
 
 export default function Post({ post }: PostProps) {
-
-  // const contentPost = post.data.content.map(content =>{
-  //   console.log(content)
-  // })
-
-  // console.log(post.data.content)
-
   const minutes = '4m';
 
   return (
@@ -67,16 +60,14 @@ export default function Post({ post }: PostProps) {
             </span>
           </div>
           <div className={styles.content}>
-            {post.data.content.map(content => (
-              <section key={content.heading}>
+            {post.data.content.map((content, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <section key={index}>
                 <h2>{content.heading}</h2>
-
-                {content.body.map(textBody => (
-                  <div
-                    dangerouslySetInnerHTML={{ __html: textBody.text }}
-                    className={styles.body}
-                  />
-                ))}
+                <div
+                  dangerouslySetInnerHTML={{ __html: content.body.text }}
+                  className={styles.body}
+                />
               </section>
             ))}
           </div>
@@ -131,36 +122,14 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
         alt: response.data.banner.alt,
         url: response.data.banner.url,
       },
-      content: [
-        {
-          heading: response.data.content.map(content => {
-            return [content.heading];
-          }),
-          body: [
-            {
-              text: response.data.content.map(content => {
-                return RichText.asHtml(content.body);
-              }),
-            },
-          ],
-        },
-      ],
-      // body: {
-      //   text: response.data.content[0].body,
-      // },
-      // content: {
-      //   heading:
-      // }
-      // [
-      //   {
-      //     heading: response.data.content.heading,
-      //     body: [
-      //       {
-      //         text: RichText.asHtml(response.data.content.body),
-      //       },
-      //     ],
-      //   },
-      // ],
+      content: response.data.content.map(content => {
+        return {
+          heading: content.heading,
+          body: {
+            text: RichText.asHtml(content.body),
+          },
+        };
+      }),
     },
   };
   return {
