@@ -37,29 +37,31 @@ interface PostProps {
 export default function Post({ post }: PostProps) {
   const router = useRouter();
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   function countHeading() {
-    const heading = post.data.content.reduce((sum, element) => {
-      const arrayWords = element.heading.split(" ");
+    const heading = post.data.content.reduce((acc, element) => {
+      const arrayWords = element.heading.split(' ');
       const countItemsHeading = arrayWords.length;
-      return (sum += countItemsHeading);
+      return (acc += countItemsHeading);
     }, 0);
     return heading;
   }
 
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
   function countBody() {
     const body = post.data.content.map(content => {
       const array = content.body;
       return array;
     });
     const textBody = RichText.asText(body);
-    const separetedWords = textBody.split(" ");
+    const separetedWords = textBody.split(' ');
     const count = separetedWords.length;
     return count;
   }
 
   const time = `${Math.round((countHeading() + countBody()) / 200 + 1)}m`;
 
-  if (router.isFallback) return <div>Loading...</div>;
+  if (router.isFallback) return <div className={styles.loading}>Loading...</div>;
   return (
     <>
       <Head>
