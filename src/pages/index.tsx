@@ -9,6 +9,7 @@ import { FiCalendar, FiUser } from 'react-icons/fi';
 
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
+import Header from '../components/Header';
 import { getPrismicClient } from '../services/prismic';
 
 import commonStyles from '../styles/common.module.scss';
@@ -37,7 +38,6 @@ interface HomeProps {
 export default function Home({ postsPagination }: HomeProps) {
   const [posts, setPosts] = useState(postsPagination.results);
   const [nextPage, setNextPage] = useState(postsPagination.next_page);
-  console.log('Next: ', nextPage);
 
   async function handleMorePosts(): Promise<void> {
     if (nextPage !== null) {
@@ -64,7 +64,6 @@ export default function Home({ postsPagination }: HomeProps) {
 
           setPosts(nextPagePosts);
           setNextPage(data.next_page);
-
         });
     }
   }
@@ -74,6 +73,8 @@ export default function Home({ postsPagination }: HomeProps) {
       <Head>
         <title>Início</title>
       </Head>
+
+      <Header />
 
       <main className={commonStyles.container}>
         <div className={styles.posts}>

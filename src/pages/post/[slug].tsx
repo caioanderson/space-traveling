@@ -1,12 +1,12 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
-
 import Prismic from '@prismicio/client';
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import { RichText } from 'prismic-dom';
 import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
 import Head from 'next/head';
+import Header from '../../components/Header';
 import { getPrismicClient } from '../../services/prismic';
 
 import commonStyles from '../../styles/common.module.scss';
@@ -68,6 +68,7 @@ export default function Post({ post }: PostProps) {
       <Head>
         <title>{post.data.title}</title>
       </Head>
+      <Header />
       <div className={styles.banner}>
         <img src={post.data.banner.url} alt={post.data.banner.alt} />
       </div>
