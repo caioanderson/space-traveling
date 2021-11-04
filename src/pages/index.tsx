@@ -37,6 +37,7 @@ interface HomeProps {
 export default function Home({ postsPagination }: HomeProps) {
   const [posts, setPosts] = useState(postsPagination.results);
   const [nextPage, setNextPage] = useState(postsPagination.next_page);
+  console.log('Next: ', nextPage);
 
   async function handleMorePosts(): Promise<void> {
     if (nextPage !== null) {
@@ -63,6 +64,7 @@ export default function Home({ postsPagination }: HomeProps) {
 
           setPosts(nextPagePosts);
           setNextPage(data.next_page);
+
         });
     }
   }
@@ -93,13 +95,15 @@ export default function Home({ postsPagination }: HomeProps) {
           ))}
         </div>
 
-        <button
-          type="button"
-          onClick={handleMorePosts}
-          className={styles.button}
-        >
-          Carregar mais posts
-        </button>
+        {nextPage && (
+          <button
+            type="button"
+            onClick={handleMorePosts}
+            className={styles.button}
+          >
+            Carregar mais posts
+          </button>
+        )}
       </main>
     </>
   );
