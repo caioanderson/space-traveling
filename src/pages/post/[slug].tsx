@@ -61,7 +61,8 @@ export default function Post({ post }: PostProps) {
 
   const time = `${Math.round((countHeading() + countBody()) / 200 + 1)}m`;
 
-  if (router.isFallback) return <div className={styles.loading}>Loading...</div>;
+  if (router.isFallback)
+    return <div className={styles.loading}>Loading...</div>;
   return (
     <>
       <Head>
@@ -119,7 +120,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   );
 
   return {
-    paths: [{ params: { slug: posts.results[0].uid } }],
+    paths: [{ params: { slug: `${posts.results[0].uid}` } }],
     fallback: true,
   };
 };
