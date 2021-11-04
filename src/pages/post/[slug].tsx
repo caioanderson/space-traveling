@@ -1,4 +1,5 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
 
 import Prismic from '@prismicio/client';
 import { format } from 'date-fns';
@@ -34,8 +35,31 @@ interface PostProps {
 }
 
 export default function Post({ post }: PostProps) {
-  const minutes = '4m';
+  const router = useRouter();
 
+  function countHeading() {
+    const heading = post.data.content.reduce((sum, element) => {
+      const arrayWords = element.heading.split(" ");
+      const countItemsHeading = arrayWords.length;
+      return (sum += countItemsHeading);
+    }, 0);
+    return heading;
+  }
+
+  function countBody() {
+    const body = post.data.content.map(content => {
+      const array = content.body;
+      return array;
+    });
+    const textBody = RichText.asText(body);
+    const separetedWords = textBody.split(" ");
+    const count = separetedWords.length;
+    return count;
+  }
+
+  const time = `${Math.round((countHeading() + countBody()) / 200 + 1)}m`;
+
+  if (router.isFallback) return <div>Loading...</div>;
   return (
     <>
       <Head>
@@ -56,7 +80,7 @@ export default function Post({ post }: PostProps) {
               <FiUser size={20} /> {post.data.author}
             </span>
             <span>
-              <FiClock size={20} /> {minutes}
+              <FiClock size={20} /> {time}
             </span>
           </div>
           <div className={styles.content}>
@@ -89,15 +113,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
         'post.banner',
         'post.content',
       ],
-      pageSize: 1,
     }
   );
 
-  const response = await prismic.getByUID('post', posts.results[0].uid, {});
-
   return {
-    paths: [{ params: { slug: response.uid } }],
-    fallback: 'blocking',
+    paths: [{ params: { slug: posts.results[0].uid } }],
+    fallback: true,
   };
 };
 
@@ -134,5 +155,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   };
   return {
     props: { post },
+    revalidate: 1,
   };
 };

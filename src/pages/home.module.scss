@@ -1,12 +1,6 @@
 // TODO
-.container {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 0 2rem;
-
-  height: 100vh;
-
-  button{
+main{
+  .button{
     font-size: 1.125rem;
     color: var(--pink-800);
 

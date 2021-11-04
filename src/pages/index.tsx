@@ -11,7 +11,7 @@ import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import { getPrismicClient } from '../services/prismic';
 
-// import commonStyles from '../styles/common.module.scss';
+import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
 
 interface Post {
@@ -73,7 +73,7 @@ export default function Home({ postsPagination }: HomeProps) {
         <title>Início</title>
       </Head>
 
-      <main className={styles.container}>
+      <main className={commonStyles.container}>
         <div className={styles.posts}>
           {posts.map(post => (
             <Link href={`/post/${post.slug}`} key={post.slug}>
@@ -93,7 +93,11 @@ export default function Home({ postsPagination }: HomeProps) {
           ))}
         </div>
 
-        <button type="button" onClick={handleMorePosts}>
+        <button
+          type="button"
+          onClick={handleMorePosts}
+          className={styles.button}
+        >
           Carregar mais posts
         </button>
       </main>
