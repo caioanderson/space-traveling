@@ -6,6 +6,7 @@ import ptBR from 'date-fns/locale/pt-BR';
 import { RichText } from 'prismic-dom';
 import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
 import Head from 'next/head';
+import { useEffect, useState } from 'react';
 import Header from '../../components/Header';
 import { getPrismicClient } from '../../services/prismic';
 
@@ -17,7 +18,6 @@ interface Post {
   data: {
     title: string;
     banner: {
-      alt: string;
       url: string;
     };
     author: string;
@@ -34,35 +34,47 @@ interface PostProps {
   post: Post;
 }
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function Post({ post }: PostProps) {
   const router = useRouter();
 
+  const [contentPost, setContentPost] = useState();
+  //   post.data.content.map(item => {
+  //     const content = {
+  //       heading: item.heading,
+  //       body: {
+  //         text: item.body,
+  //       },
+  //     };
+  //     return content;
+  //   })
+  // );
+
+  // const contentPost = post.data.content.map(item => {
+  //   const content = {
+  //     heading: item.heading,
+  //     body: item.body,
+  //   };
+  //   return content;
+  // });
+  // console.log("🚀 ~ file: [slug].tsx ~ line 60 ~ Post ~ contentPost", contentPost)
+
   // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  function countHeading() {
-    const heading = post.data.content.reduce((acc, element) => {
-      const arrayWords = element.heading.split(' ');
-      const countItemsHeading = arrayWords.length;
-      return (acc += countItemsHeading);
+  const time = () => {
+    const content = post.data.content.reduce((acc, element) => {
+      const textBody = RichText.asText(element.body);
+      const body = textBody.split(' ');
+      const countItemsBody = body.length;
+      const result = Math.ceil(countItemsBody / 200);
+
+      return acc + result;
     }, 0);
-    return heading;
-  }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  function countBody() {
-    const body = post.data.content.map(content => {
-      const array = content.body;
-      return array;
-    });
-    const textBody = RichText.asText(body);
-    const separetedWords = textBody.split(' ');
-    const count = separetedWords.length;
-    return count;
-  }
-
-  const time = `${Math.round((countHeading() + countBody()) / 200 + 1)}m`;
+    return content;
+  };
 
   if (router.isFallback)
-    return <div className={styles.loading}>Loading...</div>;
+    return <div className={styles.loading}>Carregando...</div>;
   return (
     <>
       <Head>
@@ -70,7 +82,7 @@ export default function Post({ post }: PostProps) {
       </Head>
       <Header />
       <div className={styles.banner}>
-        <img src={post.data.banner.url} alt={post.data.banner.alt} />
+        <img src={post.data.banner.url} alt={post.data.title} />
       </div>
 
       <div className={commonStyles.container}>
@@ -78,13 +90,16 @@ export default function Post({ post }: PostProps) {
           <h1>{post.data.title}</h1>
           <div className={styles.infoPost}>
             <span>
-              <FiCalendar size={20} /> {post.first_publication_date}
+              <FiCalendar size={20} />
+              {format(new Date(post.first_publication_date), 'dd MMM yyyy', {
+                locale: ptBR,
+              })}
             </span>
             <span>
               <FiUser size={20} /> {post.data.author}
             </span>
             <span>
-              <FiClock size={20} /> {time}
+              <FiClock size={20} /> {time()} min
             </span>
           </div>
           <div className={styles.content}>
@@ -93,7 +108,7 @@ export default function Post({ post }: PostProps) {
               <section key={index}>
                 <h2>{content.heading}</h2>
                 <div
-                  dangerouslySetInnerHTML={{ __html: content.body.text }}
+                  dangerouslySetInnerHTML={{ __html: RichText.asHtml(content.body) }}
                   className={styles.body}
                 />
               </section>
@@ -110,18 +125,17 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const posts = await prismic.query(
     [Prismic.predicates.at('document.type', 'post')],
     {
-      fetch: [
-        'post.title',
-        'post.subtitle',
-        'post.author',
-        'post.banner',
-        'post.content',
-      ],
+      fetch: ['post.uid'],
+      pageSize: 10,
     }
   );
 
+  const slugsArray = posts.results.map(post => ({
+    params: { slug: post.uid },
+  }));
+
   return {
-    paths: [{ params: { slug: `${posts.results[0].uid}` } }],
+    paths: slugsArray,
     fallback: true,
   };
 };
@@ -133,32 +147,26 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const response = await prismic.getByUID('post', String(slug), {});
 
   const post = {
-    slug,
-    first_publication_date: format(
-      new Date(response.first_publication_date),
-      'dd MMM yyyy',
-      { locale: ptBR }
-    ),
+    uid: response.uid,
+    first_publication_date: response.first_publication_date,
     data: {
       title: response.data.title,
       subtitle: response.data.subtitle,
       author: response.data.author,
       banner: {
-        alt: response.data.banner.alt,
         url: response.data.banner.url,
       },
       content: response.data.content.map(content => {
         return {
           heading: content.heading,
-          body: {
-            text: RichText.asHtml(content.body),
-          },
+          body: [...content.body],
         };
       }),
     },
   };
+
   return {
     props: { post },
-    revalidate: 1,
+    revalidate: 3600,
   };
 };

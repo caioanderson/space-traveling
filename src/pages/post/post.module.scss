@@ -39,6 +39,10 @@
         margin-right: .5rem;
       }
 
+      &:last-child{
+        text-transform: none;
+      }
+
     }
 
     span + span{

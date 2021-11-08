@@ -17,7 +17,6 @@ import styles from './home.module.scss';
 
 interface Post {
   uid?: string;
-  slug: string;
   first_publication_date: string | null;
   data: {
     title: string;
@@ -46,12 +45,8 @@ export default function Home({ postsPagination }: HomeProps) {
         .then(data => {
           const newPost = data.results.map(post => {
             return {
-              slug: post.uid,
-              first_publication_date: format(
-                new Date(post.first_publication_date),
-                'dd MMM yyyy',
-                { locale: ptBR }
-              ),
+              uid: post.uid,
+              first_publication_date: post.first_publication_date,
               data: {
                 title: post.data.title,
                 subtitle: post.data.subtitle,
@@ -78,14 +73,19 @@ export default function Home({ postsPagination }: HomeProps) {
 
       <main className={commonStyles.container}>
         <div className={styles.posts}>
-          {posts.map(post => (
-            <Link href={`/post/${post.slug}`} key={post.slug}>
+          {posts.map((post, index) => (
+            <Link href={`/post/${post.uid}`} key={index}>
               <a>
                 <strong>{post.data.title}</strong>
                 <p>{post.data.subtitle}</p>
                 <div className={styles.infoPost}>
                   <span>
-                    <FiCalendar size={20} /> {post.first_publication_date}
+                    <FiCalendar size={20} />
+                    {format(
+                      new Date(post.first_publication_date),
+                      'dd MMM yyyy',
+                      { locale: ptBR }
+                    )}
                   </span>
                   <span>
                     <FiUser size={20} /> {post.data.author}
@@ -123,12 +123,8 @@ export const getStaticProps: GetStaticProps = async () => {
 
   const posts = response.results.map(post => {
     return {
-      slug: post.uid,
-      first_publication_date: format(
-        new Date(post.first_publication_date),
-        'dd MMM yyyy',
-        { locale: ptBR }
-      ),
+      uid: post.uid,
+      first_publication_date: post.first_publication_date,
       data: {
         title: post.data.title,
         subtitle: post.data.subtitle,
@@ -141,5 +137,6 @@ export const getStaticProps: GetStaticProps = async () => {
 
   return {
     props: { postsPagination: { next_page, results: posts } },
+    revalidate: 1,
   };
 };
