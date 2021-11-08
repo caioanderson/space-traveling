@@ -137,6 +137,6 @@ export const getStaticProps: GetStaticProps = async () => {
 
   return {
     props: { postsPagination: { next_page, results: posts } },
-    revalidate: 1,
+    revalidate: 3600,
   };
 };

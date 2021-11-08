@@ -38,40 +38,14 @@ interface PostProps {
 export default function Post({ post }: PostProps) {
   const router = useRouter();
 
-  const [contentPost, setContentPost] = useState();
-  //   post.data.content.map(item => {
-  //     const content = {
-  //       heading: item.heading,
-  //       body: {
-  //         text: item.body,
-  //       },
-  //     };
-  //     return content;
-  //   })
-  // );
+  const time = post.data.content.reduce((acc, element) => {
+    const textBody = RichText.asText(element.body);
+    const body = textBody.split(' ');
+    const countItemsBody = body.length;
+    const result = Math.ceil(countItemsBody / 200);
 
-  // const contentPost = post.data.content.map(item => {
-  //   const content = {
-  //     heading: item.heading,
-  //     body: item.body,
-  //   };
-  //   return content;
-  // });
-  // console.log("🚀 ~ file: [slug].tsx ~ line 60 ~ Post ~ contentPost", contentPost)
-
-  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
-  const time = () => {
-    const content = post.data.content.reduce((acc, element) => {
-      const textBody = RichText.asText(element.body);
-      const body = textBody.split(' ');
-      const countItemsBody = body.length;
-      const result = Math.ceil(countItemsBody / 200);
-
-      return acc + result;
-    }, 0);
-
-    return content;
-  };
+    return acc + result;
+  }, 0);
 
   if (router.isFallback)
     return <div className={styles.loading}>Carregando...</div>;
@@ -99,7 +73,7 @@ export default function Post({ post }: PostProps) {
               <FiUser size={20} /> {post.data.author}
             </span>
             <span>
-              <FiClock size={20} /> {time()} min
+              <FiClock size={20} /> {time} min
             </span>
           </div>
           <div className={styles.content}>
