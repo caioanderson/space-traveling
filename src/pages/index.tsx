@@ -14,6 +14,7 @@ import { getPrismicClient } from '../services/prismic';
 
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
+import { ButtonExitPreview } from '../components/ButtonExitPreview';
 
 interface Post {
   uid?: string;
@@ -105,6 +106,7 @@ export default function Home({ postsPagination }: HomeProps) {
             Carregar mais posts
           </button>
         )}
+        <ButtonExitPreview />
       </main>
     </>
   );

@@ -6,7 +6,6 @@ import ptBR from 'date-fns/locale/pt-BR';
 import { RichText } from 'prismic-dom';
 import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
 import Head from 'next/head';
-import { useEffect, useState } from 'react';
 import Header from '../../components/Header';
 import { getPrismicClient } from '../../services/prismic';
 
@@ -34,7 +33,6 @@ interface PostProps {
   post: Post;
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export default function Post({ post }: PostProps) {
   const router = useRouter();
 
@@ -78,11 +76,12 @@ export default function Post({ post }: PostProps) {
           </div>
           <div className={styles.content}>
             {post.data.content.map((content, index) => (
-              // eslint-disable-next-line react/no-array-index-key
               <section key={index}>
                 <h2>{content.heading}</h2>
                 <div
-                  dangerouslySetInnerHTML={{ __html: RichText.asHtml(content.body) }}
+                  dangerouslySetInnerHTML={{
+                    __html: RichText.asHtml(content.body),
+                  }}
                   className={styles.body}
                 />
               </section>
