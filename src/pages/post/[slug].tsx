@@ -11,6 +11,8 @@ import { getPrismicClient } from '../../services/prismic';
 
 import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
+import { ButtonExitPreview } from '../../components/ButtonExitPreview';
+import { Comments } from '../../components/Comments';
 
 interface Post {
   first_publication_date: string | null;
@@ -88,6 +90,26 @@ export default function Post({ post }: PostProps) {
             ))}
           </div>
         </div>
+
+        <div className={styles.divider} />
+
+        <footer className={commonStyles.footer}>
+          <div className={styles.footer}>
+            <div className={styles.headerFooter}>
+              <div className={styles.postPrevious}>
+                <span>Como utilizar Hooks</span>
+                <a>Post anterior</a>
+              </div>
+              <div className={styles.postPrevious}>
+                <span>Criando um app CRA do Zero</span>
+                <a>Próximo post</a>
+              </div>
+            </div>
+            <Comments />
+
+            <ButtonExitPreview />
+          </div>
+        </footer>
       </div>
     </>
   );

@@ -1,32 +1,31 @@
 // TODO
-.banner{
+.banner {
   display: flex;
   align-items: center;
   justify-content: center;
 
   width: 100%;
 
-  img{
+  img {
     width: 100%;
     height: 400px;
   }
 }
 
-.header{
+.header {
   margin-top: 5rem;
 
-  h1{
+  h1 {
     font-size: 3rem;
     margin-bottom: 1.5rem;
   }
 
-  .infoPost{
-
+  .infoPost {
     display: flex;
     align-items: center;
 
-    span{
-      font-size: .875rem;
+    span {
+      font-size: 0.875rem;
       font-weight: 400;
       color: var(--gray-800);
 
@@ -35,51 +34,50 @@
       display: flex;
       align-items: center;
 
-      svg{
-        margin-right: .5rem;
+      svg {
+        margin-right: 0.5rem;
       }
 
-      &:last-child{
+      &:last-child {
         text-transform: none;
       }
-
     }
 
-    span + span{
+    span + span {
       margin-left: 1.5rem;
     }
   }
-
 }
 
-.content{
+.content {
   margin-top: 4rem;
-  padding-bottom: 5rem;
 
-  h2{
+  h2 {
     font-size: 2.25rem;
   }
 
-  section{
+  section {
     margin-bottom: 2rem;
   }
 
-  .body{
+  .body {
     margin-top: 2rem;
 
-    p, span, li{
+    p,
+    span,
+    li {
       color: var(--gray-800);
       line-height: 2rem;
       text-align: justify;
 
-      strong{
+      strong {
         color: var(--pink-800);
 
-        &:first-child{
+        &:first-child {
           color: var(--gray-800);
         }
 
-        &:last-child{
+        &:last-child {
           color: var(--gray-800);
         }
       }
@@ -87,11 +85,41 @@
   }
 }
 
-.loading{
+.loading {
   height: 100vh;
   color: var(--pink-800);
 
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.footer {
+  margin-top: 3.75rem;
+  border-top: 1px solid rgba(215,215,215, .1);
+  padding-top: 3rem;
+
+  .headerFooter{
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .postPrevious {
+      display: flex;
+      flex-direction: column;
+
+      span{
+        color: var(--gray-50);
+      }
+
+      a{
+        color: var(--pink-800);
+        font-weight: 600;
+      }
+
+    }
+
+  }
+
 }
