@@ -47,6 +47,15 @@
       margin-left: 1.5rem;
     }
   }
+  .infoEdit{
+    margin-top: 1rem;
+
+    span{
+      font-weight: 400;
+      font-size: 0.875rem;
+      color: var(--gray-800);
+    }
+  }
 }
 
 .content {
@@ -96,11 +105,10 @@
 
 .footer {
   margin-top: 3.75rem;
-  border-top: 1px solid rgba(215,215,215, .1);
+  border-top: 1px solid rgba(215, 215, 215, 0.1);
   padding-top: 3rem;
 
-  .headerFooter{
-
+  .headerFooter {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -109,17 +117,14 @@
       display: flex;
       flex-direction: column;
 
-      span{
+      span {
         color: var(--gray-50);
       }
 
-      a{
+      a {
         color: var(--pink-800);
         font-weight: 600;
       }
-
     }
-
   }
-
 }
