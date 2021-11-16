@@ -8,5 +8,5 @@ export function ButtonExitPreview() {
         <a>Sair do modo Preview</a>
       </Link>
     </div>
-  )
+  );
 }

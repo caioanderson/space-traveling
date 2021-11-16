@@ -135,7 +135,7 @@ export default function Post({ post, nextPost, preview, prevPost }: PostProps) {
             </div>
             <Comments />
 
-            {preview && <ButtonExitPreview />}
+            {!preview && <ButtonExitPreview />}
           </div>
         </footer>
       </div>
